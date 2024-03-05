@@ -17,11 +17,11 @@ class ContractTest {
         googlePubSubMock.executeTests()
         googlePubSubMock.setExpectations(
             listOf(
-                Expectation(productsTopic, 1),
-                Expectation(tasksTopic, 1)
+                Expectation(productsTopic, 2),
+                Expectation(tasksTopic, 2)
             )
         )
-        googlePubSubMock.awaitMessages(2)
+        googlePubSubMock.awaitMessages(4)
         val result = googlePubSubMock.verifyExpectations()
         if (!result.success) {
             println(result.errors)

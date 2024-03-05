@@ -1,0 +1,15 @@
+{
+  "channel": {
+    "demo.products": {
+      "publish": {
+        "message": {
+          "payload": {
+            "id": 456,
+            "name": "AirPods",
+            "inventory": 100
+          }
+        }
+      }
+    }
+  }
+}

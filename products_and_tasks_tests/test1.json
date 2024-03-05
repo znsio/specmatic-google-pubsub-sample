@@ -1,0 +1,15 @@
+{
+  "channel": {
+    "demo.products": {
+      "publish": {
+        "message": {
+          "payload": {
+            "id": 123,
+            "name": "Vision Pro",
+            "inventory": 10
+          }
+        }
+      }
+    }
+  }
+}
