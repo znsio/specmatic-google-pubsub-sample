@@ -1,0 +1,13 @@
+{
+  "channel": {
+    "demo.tasks": {
+      "subscribe": {
+        "message": {
+          "payload": {
+            "name": "Vision Pro Task"
+          }
+        }
+      }
+    }
+  }
+}
