@@ -3,7 +3,7 @@
     {
       "provider": "filesystem",
       "test": [
-        "products_and_tasks.yaml"
+        "product_service.yaml"
       ]
     }
   ]

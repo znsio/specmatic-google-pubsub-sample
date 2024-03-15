@@ -2,26 +2,21 @@ asyncapi: 2.6.0
 info:
   title: Product audits API 6
   version: '1.0.0'
-servers:
-  kafka-dev:
-    url: tcp://localhost:61616
-    protocol: kafka
 channels:
   demo.products:
     publish:
       operationId: publishProducts
       message:
-        payload:
-          $ref: "#/components/messages/product"
+        $ref: "#/components/messages/Product"
   demo.tasks:
     subscribe:
-      operationId: acceptTasks
+      operationId: getTasks
       message:
-        payload:
-          $ref: "#/components/messages/Task"
+        $ref: "#/components/messages/Task"
+
 components:
   messages:
-    product:
+    Product:
       name: product
       title: An inventory product
       summary: Product representing items in inventory
@@ -38,6 +33,12 @@ components:
           id:
             description: Unique identifier of the product
             type: number
+      examples:
+        - name: SUCCESS
+          payload:
+            name: "Vision Pro"
+            inventory: 10
+            id: 123
     Task:
       name: Task
       title: A Task to be processed
@@ -50,3 +51,8 @@ components:
         properties:
           name:
             type: string
+      examples:
+        - name: SUCCESS
+          payload:
+            name: "Vision Pro Task"
+

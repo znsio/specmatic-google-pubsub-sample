@@ -17,7 +17,7 @@ class ProductService {
 
     private val productsTopic = "demo.products"
     private val tasksTopic = "demo.tasks"
-    private val googlePubSubClient = GooglePubSubClient(projectId)
+    private val googlePubSubClient = GooglePubSubClient(projectId, "Product Service")
     private val gson = Gson()
 
 
@@ -44,7 +44,7 @@ class ProductService {
     }
 
     private fun processMessage(topic:String, message:String){
-        println("Product Service received message on topic $topic: $message")
+        println("Product Service has received message on topic $topic: $message")
         val product = gson.fromJson(message, Product::class.java)
         val taskMessage = """{"name": "${product.name} Task"}"""
         googlePubSubClient.publish(tasksTopic, taskMessage)

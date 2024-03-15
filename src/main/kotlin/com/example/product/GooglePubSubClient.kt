@@ -8,7 +8,7 @@ import com.google.pubsub.v1.*
 import java.util.concurrent.TimeUnit
 
 
-class GooglePubSubClient(private val projectId:String) {
+class GooglePubSubClient(private val projectId:String, private val serviceName: String) {
 
     fun createPullSubscription(topicName:String, subscriptionName:String) {
         SubscriptionAdminClient.create().use { subscriptionAdminClient ->
@@ -30,24 +30,11 @@ class GooglePubSubClient(private val projectId:String) {
         }
     }
 
-    fun deleteSubscription(subscriptionId: String) {
-        val subscriptionName = ProjectSubscriptionName.format(projectId, subscriptionId)
-
-        SubscriptionAdminClient.create().use { subscriptionAdminClient ->
-            try {
-                subscriptionAdminClient.deleteSubscription(subscriptionName)
-                println("Subscription $subscriptionId deleted.")
-            } catch (e: Exception) {
-                println("Error deleting subscription: ${e.message}")
-            }
-        }
-    }
-
     fun publish(topicId: String, message: String) {
         val topicName = TopicName.of(projectId, topicId)
         var publisher: Publisher? = null
         try {
-            println("Publishing message: $message")
+            println("$serviceName has started publishing message: $message on topic: $topicId")
             // Create a publisher instance with default settings bound to the topic
             publisher = Publisher.newBuilder(topicName).build()
             val data: ByteString = ByteString.copyFromUtf8(message)
@@ -56,7 +43,7 @@ class GooglePubSubClient(private val projectId:String) {
             // Once published, returns a server-assigned message id (unique within the topic)
             val messageIdFuture: ApiFuture<String> = publisher.publish(pubsubMessage)
             val messageId = messageIdFuture.get()
-            println("Published message ID: $messageId")
+            println("$serviceName has published the message wih ID: $messageId")
         } finally {
             if (publisher != null) {
                 // When finished with the publisher, shutdown to free up resources.
