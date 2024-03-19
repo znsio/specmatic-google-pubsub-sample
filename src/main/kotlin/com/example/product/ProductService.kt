@@ -7,30 +7,31 @@ import com.google.pubsub.v1.ProjectSubscriptionName
 import com.google.pubsub.v1.ProjectTopicName
 import com.google.pubsub.v1.PubsubMessage
 import org.springframework.stereotype.Service
-import kotlin.random.Random
+import java.math.BigDecimal
 
 private const val PRODUCTSERVICE_SUBSCRIPTION_PREFIX = "productservice-subscription"
 private const val projectId = "pub-sub-demo-414308"
+private const val ORDER_STATUS_PROCESSED = "PROCESSED"
 
 @Service
 class ProductService {
 
-    private val productsTopic = "demo.products"
-    private val tasksTopic = "demo.tasks"
+    private val placeOrderTopic = "place-order"
+    private val processOrderTopic = "process-order"
     private val googlePubSubClient = GooglePubSubClient(projectId, "Product Service")
     private val gson = Gson()
 
 
     fun run() {
-        val subscriptionId = "$PRODUCTSERVICE_SUBSCRIPTION_PREFIX-$productsTopic"
+        val subscriptionId = "$PRODUCTSERVICE_SUBSCRIPTION_PREFIX-$placeOrderTopic"
         val subscriptionName = ProjectSubscriptionName.format(projectId, subscriptionId)
-        val topicName = ProjectTopicName.format(projectId, productsTopic)
+        val topicName = ProjectTopicName.format(projectId, placeOrderTopic)
 
         println("Creating subscription $subscriptionName for topic $topicName")
         googlePubSubClient.createPullSubscription(topicName, subscriptionName)
 
         val messageReceiver = { message: PubsubMessage, consumer: AckReplyConsumer ->
-            processMessage(productsTopic, message.data.toStringUtf8())
+            processMessage(placeOrderTopic, message.data.toStringUtf8())
             consumer.ack()
         }
         val subscriber = Subscriber.newBuilder(subscriptionName, messageReceiver).build()
@@ -45,14 +46,23 @@ class ProductService {
 
     private fun processMessage(topic:String, message:String){
         println("Product Service has received message on topic $topic: $message")
-        val product = gson.fromJson(message, Product::class.java)
-        val taskMessage = """{"name": "${product.name} Task"}"""
-        googlePubSubClient.publish(tasksTopic, taskMessage)
+        val orderRequest = gson.fromJson(message, OrderRequest::class.java)
+        val totalAmount = orderRequest.orderItems.sumOf { it.price * BigDecimal(it.quantity) }
+        val taskMessage = """{"totalAmount": $totalAmount, "status": "$ORDER_STATUS_PROCESSED"}"""
+        googlePubSubClient.publish(processOrderTopic, taskMessage)
     }
 }
 
-data class Product(
+
+data class OrderRequest(
+    val orderItems: List<OrderItem>,
+    val status: String
+)
+
+data class OrderItem(
     val id: Int,
     val name: String,
-    val inventory: Int
+    val quantity: Int,
+    val price: BigDecimal
 )
+

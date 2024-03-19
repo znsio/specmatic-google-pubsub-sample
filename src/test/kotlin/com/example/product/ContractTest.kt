@@ -10,24 +10,24 @@ import org.springframework.boot.runApplication
 import org.springframework.context.ConfigurableApplicationContext
 
 
-class ContractTest : SpecmaticGooglePubSubTestBase() {
+class ContractTest : SpecmaticGooglePubSubTestBase(15000) {
 
     companion object {
 
         private const val projectId = "pub-sub-demo-414308"
         private lateinit var context: ConfigurableApplicationContext
-        private const val productsTopic = "demo.products"
-        private const val tasksTopic = "demo.tasks"
+        private const val placeOrderTopic = "place-order"
+        private const val processOrderTopic = "process-order"
 
         @JvmStatic
         @BeforeAll
         fun setUp() {
-            googlePubSubMock = GooglePubSubMock.connectWithBroker(projectId, 15000)
+            googlePubSubMock = GooglePubSubMock.connectWithBroker(projectId)
 
             googlePubSubMock.setExpectations(
                 listOf(
-                    Expectation(productsTopic, 1),
-                    Expectation(tasksTopic, 1)
+                    Expectation(placeOrderTopic, 1),
+                    Expectation(processOrderTopic, 1)
                 )
             )
 
@@ -38,9 +38,8 @@ class ContractTest : SpecmaticGooglePubSubTestBase() {
         @JvmStatic
         @AfterAll
         fun tearDown() {
-            val result = googlePubSubMock.verifyExpectations()
             context.stop()
-            googlePubSubMock.stop()
+            val result =  googlePubSubMock.stop()
             assertThat(result.success).withFailMessage(result.errors.joinToString()).isTrue
         }
     }

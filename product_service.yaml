@@ -3,56 +3,82 @@ info:
   title: Product audits API 6
   version: '1.0.0'
 channels:
-  demo.products:
+  place-order:
     publish:
-      operationId: publishProducts
+      operationId: placeOrder
       message:
-        $ref: "#/components/messages/Product"
-  demo.tasks:
+        $ref: "#/components/messages/OrderRequest"
+  process-order:
     subscribe:
-      operationId: getTasks
+      operationId: processOrder
       message:
-        $ref: "#/components/messages/Task"
+        $ref: "#/components/messages/Order"
 
 components:
   messages:
-    Product:
-      name: product
-      title: An inventory product
-      summary: Product representing items in inventory
+    OrderRequest:
+      name: OrderRequest
+      title: An order request
       contentType: application/json
       payload:
         type: object
         properties:
-          name:
-            description: Every product has a name
-            type: string
-          inventory:
-            description: Count of items in inventory
-            type: number
           id:
-            description: Unique identifier of the product
+            description: Unique identifier of the order request
             type: number
+          orderItems:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                quantity:
+                  type: integer
+                price:
+                  type: number
+              required:
+                - id
+                - name
+                - quantity
+                - price
       examples:
-        - name: SUCCESS
+        - name: NEW_ORDER
           payload:
-            name: "Vision Pro"
-            inventory: 10
-            id: 123
-    Task:
-      name: Task
-      title: A Task to be processed
-      summary: Inform about a new user task in the system
+            id: 12345
+            orderItems:
+              - id: 1
+                name: "Macbook"
+                quantity: 1
+                price: 2000.00
+              - id: 2
+                name: "Iphone"
+                quantity: 1
+                price: 1000.00
+    Order:
+      name: ProcessedOrder
+      title: A processed order
       contentType: application/json
       payload:
         type: object
         required:
-          - name
+          - totalPrice
+          - status
         properties:
-          name:
+          orderRequestId:
+            type: integer
+          totalAmount:
+            type: number
+          status:
             type: string
+            enum:
+              - PROCESSED
+              - CANCELLED
       examples:
-        - name: SUCCESS
+        - name: NEW_ORDER
           payload:
-            name: "Vision Pro Task"
+            totalAmount: 3000.00
+            status: "PROCESSED"
 
