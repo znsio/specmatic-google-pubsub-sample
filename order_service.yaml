@@ -47,6 +47,11 @@ components:
                 - name
                 - quantity
                 - price
+      headers:
+        type: object
+        properties:
+          SOURCE_ID:
+            type: string
       examples:
         - name: NEW_ORDER
           payload:
@@ -60,6 +65,8 @@ components:
                 name: "Iphone"
                 quantity: 1
                 price: 1000.00
+          headers:
+            SOURCE_ID: "CART_SERVICE"
     Order:
       name: ProcessedOrder
       title: A processed order
@@ -79,9 +86,16 @@ components:
             enum:
               - PROCESSED
               - CANCELLED
+      headers:
+        type: object
+        properties:
+          SOURCE_ID:
+            type: string
       examples:
         - name: NEW_ORDER
           payload:
             totalAmount: 3000.00
             status: "PROCESSED"
+          headers:
+            SOURCE_ID: "ORDER_SERVICE"
 

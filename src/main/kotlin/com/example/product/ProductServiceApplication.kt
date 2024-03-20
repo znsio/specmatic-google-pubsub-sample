@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class ProductServiceApplication @Autowired constructor( private val productService: ProductService) {
+class ProductServiceApplication @Autowired constructor( private val productService: OrderService) {
     fun run() {
         val logger = LoggerFactory.getLogger(ProductServiceApplication::class.java)
         logger.info("Starting Google PubSub Product Service...")

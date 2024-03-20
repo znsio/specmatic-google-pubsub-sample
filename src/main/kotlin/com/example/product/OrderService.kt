@@ -9,21 +9,22 @@ import com.google.pubsub.v1.PubsubMessage
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
-private const val PRODUCTSERVICE_SUBSCRIPTION_PREFIX = "productservice-subscription"
+private const val ORDERERVICE_SUBSCRIPTION_PREFIX = "orderservice-subscription"
 private const val projectId = "pub-sub-demo-414308"
 private const val ORDER_STATUS_PROCESSED = "PROCESSED"
+private const val SERVICE_NAME = "Order Service"
 
 @Service
-class ProductService {
+class OrderService {
 
     private val placeOrderTopic = "place-order"
     private val processOrderTopic = "process-order"
-    private val googlePubSubClient = GooglePubSubClient(projectId, "Product Service")
+    private val googlePubSubClient = GooglePubSubClient(projectId, SERVICE_NAME)
     private val gson = Gson()
 
 
     fun run() {
-        val subscriptionId = "$PRODUCTSERVICE_SUBSCRIPTION_PREFIX-$placeOrderTopic"
+        val subscriptionId = "$ORDERERVICE_SUBSCRIPTION_PREFIX-$placeOrderTopic"
         val subscriptionName = ProjectSubscriptionName.format(projectId, subscriptionId)
         val topicName = ProjectTopicName.format(projectId, placeOrderTopic)
 
@@ -31,7 +32,7 @@ class ProductService {
         googlePubSubClient.createPullSubscription(topicName, subscriptionName)
 
         val messageReceiver = { message: PubsubMessage, consumer: AckReplyConsumer ->
-            processMessage(placeOrderTopic, message.data.toStringUtf8())
+            processMessage(placeOrderTopic, message.data.toStringUtf8(), message.attributesMap)
             consumer.ack()
         }
         val subscriber = Subscriber.newBuilder(subscriptionName, messageReceiver).build()
@@ -44,12 +45,15 @@ class ProductService {
         }
     }
 
-    private fun processMessage(topic:String, message:String){
-        println("Product Service has received message on topic $topic: $message")
+    private fun processMessage(topic:String, message:String, attributes:Map<String, String>) {
+        val prettyPrintedMessage = googlePubSubClient.prettyPrintedMessage(message, attributes)
+        println("$SERVICE_NAME received a message on topic $topic: $prettyPrintedMessage")
+
         val orderRequest = gson.fromJson(message, OrderRequest::class.java)
         val totalAmount = orderRequest.orderItems.sumOf { it.price * BigDecimal(it.quantity) }
         val taskMessage = """{"totalAmount": $totalAmount, "status": "$ORDER_STATUS_PROCESSED"}"""
-        googlePubSubClient.publish(processOrderTopic, taskMessage)
+
+        googlePubSubClient.publish(processOrderTopic, taskMessage, mapOf("SOURCE_ID" to SERVICE_NAME))
     }
 }
 
