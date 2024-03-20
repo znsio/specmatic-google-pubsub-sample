@@ -34,7 +34,6 @@ class GooglePubSubClient(private val projectId:String, private val serviceName: 
         val topicName = TopicName.of(projectId, topicId)
         var publisher: Publisher? = null
         try {
-            println("$serviceName has started publishing message: $message on topic: $topicId")
             // Create a publisher instance with default settings bound to the topic
             publisher = Publisher.newBuilder(topicName).build()
             val data: ByteString = ByteString.copyFromUtf8(message)
@@ -43,7 +42,7 @@ class GooglePubSubClient(private val projectId:String, private val serviceName: 
             // Once published, returns a server-assigned message id (unique within the topic)
             val messageIdFuture: ApiFuture<String> = publisher.publish(pubsubMessage)
             val messageId = messageIdFuture.get()
-            println("$serviceName has published the message wih ID: $messageId")
+            println("$serviceName has published a message wih ID: $messageId on topic: $topicId \n $message")
         } finally {
             if (publisher != null) {
                 // When finished with the publisher, shutdown to free up resources.

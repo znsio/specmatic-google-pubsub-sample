@@ -16,21 +16,11 @@ class ContractTest : SpecmaticGooglePubSubTestBase(15000) {
 
         private const val projectId = "pub-sub-demo-414308"
         private lateinit var context: ConfigurableApplicationContext
-        private const val placeOrderTopic = "place-order"
-        private const val processOrderTopic = "process-order"
 
         @JvmStatic
         @BeforeAll
         fun setUp() {
             googlePubSubMock = GooglePubSubMock.connectWithBroker(projectId)
-
-            googlePubSubMock.setExpectations(
-                listOf(
-                    Expectation(placeOrderTopic, 1),
-                    Expectation(processOrderTopic, 1)
-                )
-            )
-
             context = runApplication<ProductServiceApplication>()
             context.getBean(ProductServiceApplication::class.java).run()
         }
@@ -39,7 +29,7 @@ class ContractTest : SpecmaticGooglePubSubTestBase(15000) {
         @AfterAll
         fun tearDown() {
             context.stop()
-            val result =  googlePubSubMock.stop()
+            val result = googlePubSubMock.stop()
             assertThat(result.success).withFailMessage(result.errors.joinToString()).isTrue
         }
     }

@@ -22,6 +22,9 @@ components:
       contentType: application/json
       payload:
         type: object
+        required:
+          - id
+          - orderItems
         properties:
           id:
             description: Unique identifier of the order request
