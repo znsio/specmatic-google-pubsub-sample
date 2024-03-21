@@ -2,7 +2,6 @@ package com.example.product
 
 import `in`.specmatic.googlepubsub.mock.GooglePubSubMock
 import `in`.specmatic.googlepubsub.mock.SpecmaticGooglePubSubTestBase
-import `in`.specmatic.googlepubsub.mock.model.Expectation
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll

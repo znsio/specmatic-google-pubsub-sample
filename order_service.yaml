@@ -53,7 +53,7 @@ components:
           SOURCE_ID:
             type: string
       examples:
-        - name: NEW_ORDER
+        - name: NEW_ORDER_1
           payload:
             id: 12345
             orderItems:
@@ -65,6 +65,20 @@ components:
                 name: "Iphone"
                 quantity: 1
                 price: 1000.00
+          headers:
+            SOURCE_ID: "CART_SERVICE"
+        - name: NEW_ORDER_2
+          payload:
+            id: 67890
+            orderItems:
+              - id: 1
+                name: "Vision Pro"
+                quantity: 1
+                price: 5000.00
+              - id: 2
+                name: "AirPods"
+                quantity: 1
+                price: 200.00
           headers:
             SOURCE_ID: "CART_SERVICE"
     Order:
@@ -92,9 +106,15 @@ components:
           SOURCE_ID:
             type: string
       examples:
-        - name: NEW_ORDER
+        - name: NEW_ORDER_1
           payload:
             totalAmount: 3000.00
+            status: "PROCESSED"
+          headers:
+            SOURCE_ID: "ORDER_SERVICE"
+        - name: NEW_ORDER_2
+          payload:
+            totalAmount: 5200.00
             status: "PROCESSED"
           headers:
             SOURCE_ID: "ORDER_SERVICE"
