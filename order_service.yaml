@@ -1,6 +1,6 @@
 asyncapi: 2.6.0
 info:
-  title: Product audits API 6
+  title: Order API
   version: '1.0.0'
 channels:
   place-order:
@@ -13,6 +13,11 @@ channels:
       operationId: processOrder
       message:
         $ref: "#/components/messages/Order"
+  notification:
+    subscribe:
+      operationId: notify
+      message:
+        $ref: "#/components/messages/Notification"
 
 components:
   messages:
@@ -53,7 +58,7 @@ components:
           SOURCE_ID:
             type: string
       examples:
-        - name: NEW_ORDER_1
+        - name: NEW_ORDER
           payload:
             id: 12345
             orderItems:
@@ -67,23 +72,9 @@ components:
                 price: 1000.00
           headers:
             SOURCE_ID: "CART_SERVICE"
-        - name: NEW_ORDER_2
-          payload:
-            id: 67890
-            orderItems:
-              - id: 1
-                name: "Vision Pro"
-                quantity: 1
-                price: 5000.00
-              - id: 2
-                name: "AirPods"
-                quantity: 1
-                price: 200.00
-          headers:
-            SOURCE_ID: "CART_SERVICE"
     Order:
-      name: ProcessedOrder
-      title: A processed order
+      name: OrderToProcess
+      title: An order that needs to be processed
       contentType: application/json
       payload:
         type: object
@@ -98,24 +89,44 @@ components:
           status:
             type: string
             enum:
+              - NEW
+              - INPROGRESS
               - PROCESSED
-              - CANCELLED
+              - FAILED
       headers:
         type: object
         properties:
           SOURCE_ID:
             type: string
       examples:
-        - name: NEW_ORDER_1
+        - name: NEW_ORDER
           payload:
             totalAmount: 3000.00
             status: "PROCESSED"
           headers:
             SOURCE_ID: "ORDER_SERVICE"
-        - name: NEW_ORDER_2
-          payload:
-            totalAmount: 5200.00
-            status: "PROCESSED"
-          headers:
-            SOURCE_ID: "ORDER_SERVICE"
+    Notification:
+        name: Notification
+        title: A notification message
+        contentType: application/json
+        payload:
+            type: object
+            required:
+            - message
+            - type
+            properties:
+              message:
+                  type: string
+              type:
+                type: string
+                enum:
+                - ORDER_PLACED
+                - ORDER_PROCESSED
+
+        examples:
+            - name: NEW_ORDER
+              payload:
+                message: "Order processed successfully"
+                type: "ORDER_PLACED"
+
 

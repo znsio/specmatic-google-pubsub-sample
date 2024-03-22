@@ -12,6 +12,7 @@ import java.math.BigDecimal
 private const val ORDERERVICE_SUBSCRIPTION_PREFIX = "orderservice-subscription"
 private const val projectId = "pub-sub-demo-414308"
 private const val ORDER_STATUS_PROCESSED = "PROCESSED"
+private const val NOTIFICATION_TYPE_ORDER_PLACED = "ORDER_PLACED"
 private const val SERVICE_NAME = "Order Service"
 
 @Service
@@ -19,6 +20,7 @@ class OrderService {
 
     private val placeOrderTopic = "place-order"
     private val processOrderTopic = "process-order"
+    private val notificationTopic = "notification"
     private val googlePubSubClient = GooglePubSubClient(projectId, SERVICE_NAME)
     private val gson = Gson()
 
@@ -49,11 +51,21 @@ class OrderService {
         val prettyPrintedMessage = googlePubSubClient.prettyPrintedMessage(message, attributes)
         println("$SERVICE_NAME received a message on topic $topic: $prettyPrintedMessage")
 
+        sendMessageOnProcessOrderTopic(message)
+        sendMessageOnNotificationTopic()
+    }
+
+    private fun sendMessageOnProcessOrderTopic(message: String) {
         val orderRequest = gson.fromJson(message, OrderRequest::class.java)
         val totalAmount = orderRequest.orderItems.sumOf { it.price * BigDecimal(it.quantity) }
         val taskMessage = """{"totalAmount": $totalAmount, "status": "$ORDER_STATUS_PROCESSED"}"""
 
         googlePubSubClient.publish(processOrderTopic, taskMessage, mapOf("SOURCE_ID" to SERVICE_NAME))
+    }
+
+    private fun sendMessageOnNotificationTopic() {
+        val taskMessage = """{"message": "Order processed successfully", "type": "$NOTIFICATION_TYPE_ORDER_PLACED"}"""
+        googlePubSubClient.publish(notificationTopic, taskMessage)
     }
 }
 
