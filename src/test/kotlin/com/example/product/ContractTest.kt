@@ -9,7 +9,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.ConfigurableApplicationContext
 
 
-class ContractTest : SpecmaticGooglePubSubTestBase(15000) {
+class ContractTest : SpecmaticGooglePubSubTestBase() {
 
     companion object {
 
