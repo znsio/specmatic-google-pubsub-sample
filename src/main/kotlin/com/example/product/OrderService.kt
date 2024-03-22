@@ -12,6 +12,7 @@ import java.math.BigDecimal
 private const val ORDERERVICE_SUBSCRIPTION_PREFIX = "orderservice-subscription"
 private const val projectId = "pub-sub-demo-414308"
 private const val ORDER_STATUS_PROCESSED = "PROCESSED"
+private const val ORDER_STATUS_CANCELLED = "CANCELLED"
 private const val NOTIFICATION_TYPE_ORDER_PLACED = "ORDER_PLACED"
 private const val SERVICE_NAME = "Order Service"
 

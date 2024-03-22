@@ -52,11 +52,6 @@ components:
                 - name
                 - quantity
                 - price
-      headers:
-        type: object
-        properties:
-          SOURCE_ID:
-            type: string
       examples:
         - name: NEW_ORDER
           payload:
@@ -70,8 +65,6 @@ components:
                 name: "Iphone"
                 quantity: 1
                 price: 1000.00
-          headers:
-            SOURCE_ID: "CART_SERVICE"
     Order:
       name: OrderToProcess
       title: An order that needs to be processed
@@ -93,18 +86,11 @@ components:
               - INPROGRESS
               - PROCESSED
               - FAILED
-      headers:
-        type: object
-        properties:
-          SOURCE_ID:
-            type: string
       examples:
         - name: NEW_ORDER
           payload:
             totalAmount: 3000.00
             status: "PROCESSED"
-          headers:
-            SOURCE_ID: "ORDER_SERVICE"
     Notification:
         name: Notification
         title: A notification message
