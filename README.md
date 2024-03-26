@@ -53,7 +53,7 @@ You would also need to then setup some authentication mechanism using one of the
 ## Running Tests
 You can directly run tests from your IDE from the ContractTest class, or via the shell:
 ```shell
-./gradlew test
+./gradlew clean test
 ```
 
 
