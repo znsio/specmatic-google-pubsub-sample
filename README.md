@@ -5,12 +5,16 @@
 
 This sample project demonstrates how we can run contract tests against a service which interacts with a Google PubSub instance. 
 
+## Pre-requisites
+* Gradle
+* JDK 17+
 
 ## Order Service
 The service under test is: **Order Service**.  
 It listens for messages on a Google PubSub topic called **'place-order'**.  
-For every message it receives, it sends a message on a Google PubSub topics: **'process-order'** and **notification**.  
+For every message it receives, it sends a message on a Google PubSub topics: **process-order** and **notification**.  
 We also have an async api specification defined for the Order Service in the **order_service.yaml** file.  
+The **order_service.yaml** is defined as a 'test' contract in the [specmatic.json](https://specmatic.in/documentation/specmatic_json.html) file.
 
 ### Order Service in Production
 
@@ -22,15 +26,17 @@ To run contract tests, Specmatic leverages the "named examples" defined in the a
 
 ![Order Service Production Architecture](assets/order_service_contract_test.gif)
 
-Here's the structure of a single contract test:
+Here's the structure of a contract test:
 - Specmatic will use the named example defined for the **'place-order'** topic and publish a message on the **'place-order'** topic.  
   If the example message does not match the message schema of the the **'place-order'** topic, the test will fail.
+
 - Specmatic will wait for the Order Service to process the message and publish a message on the **'process-order'** and **'notification'** topics.
+
 - Specmatic will then assert that :
   - Exactly one message each is received on the **'process-order'** and **'notification'** topics
-  - The message received on the **'process-order'** topic is as per the named example defined for the **'process-order'** topic.  
+  - The message received on the **'process-order'** topic is the named example defined for the **'process-order'** topic.  
     The message received should match the message schema for the **'process-order'** topic
-  - The message received on the **'notification'** topic is as per the named example defined for the **'notification'** topic.  
+  - The message received on the **'notification'** topic is the named example defined for the **'notification'** topic.  
     The message received should match the message schema for the **'notification'** topic
 
 ## Google PubSub project setup
