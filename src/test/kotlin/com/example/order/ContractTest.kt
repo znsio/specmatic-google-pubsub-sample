@@ -1,4 +1,4 @@
-package com.example.product
+package com.example.order
 
 import `in`.specmatic.googlepubsub.mock.GooglePubSubMock
 import `in`.specmatic.googlepubsub.mock.SpecmaticGooglePubSubTestBase

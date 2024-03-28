@@ -1,4 +1,4 @@
-package com.example.product
+package com.example.order
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

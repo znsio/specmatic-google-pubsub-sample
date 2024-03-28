@@ -1,4 +1,4 @@
-package com.example.product
+package com.example.order
 
 import com.google.api.core.ApiFuture
 import com.google.cloud.pubsub.v1.Publisher

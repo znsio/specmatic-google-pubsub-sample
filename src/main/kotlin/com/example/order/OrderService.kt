@@ -1,4 +1,4 @@
-package com.example.product
+package com.example.order
 
 import com.google.cloud.pubsub.v1.AckReplyConsumer
 import com.google.cloud.pubsub.v1.Subscriber
@@ -40,8 +40,8 @@ class OrderService {
         }
         val subscriber = Subscriber.newBuilder(subscriptionName, messageReceiver).build()
         try {
-            subscriber.startAsync().awaitRunning();
-            System.out.printf("Listening for messages on subscription: %s:\n", subscriptionName);
+            subscriber.startAsync().awaitRunning()
+            System.out.printf("Listening for messages on subscription: %s:\n", subscriptionName)
         } catch (e: Exception) {
             println("Exception for $subscriptionName: ${e.message}")
             subscriber.stopAsync()

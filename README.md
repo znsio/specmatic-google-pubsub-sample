@@ -33,28 +33,33 @@ Here's the structure of a contract test:
 - Specmatic will wait for the Order Service to process the message and publish a message on the **'process-order'** and **'notification'** topics.
 
 - Specmatic will then assert that :
-  - Exactly one message each is received on the **'process-order'** and **'notification'** topics
-  - The message received on the **'process-order'** topic is the named example defined for the **'process-order'** topic.  
-    The message received should match the message schema for the **'process-order'** topic
-  - The message received on the **'notification'** topic is the named example defined for the **'notification'** topic.  
-    The message received should match the message schema for the **'notification'** topic
+  - Exactly one message each is received on the **process-order** and **'notification'** topics
+  - The message received on the **process-order** topic is the named example defined for the **'process-order'** topic.  
+    The message received should match the message schema for the **process-order** topic
+  - The message received on the **notification** topic is the named example defined for the **notification** topic.  
+    The message received should match the message schema for the **notification** topic
 
 ## Google PubSub project setup
 
-### Use our test Google PubSub project
-
-We have a test Google PubSub project where the three channels: **place-order**, **process-order** and **notification** are already created.
-The tests are setup to run using a service account whose key is present in the **keys** directory.
-
-### Use your personal Google PubSub project
-
-If you wish to run the tests against your personal Google PubSub project, make sure that you have the three channels: **'place-order'**, **'process-order'** and **'notification'**  created there.  
-You will need to update the projectId constant in the ContractTest class to point to your Google PubSub project:
+- Create the following three topics in your Google PubSub project: 
+  - **place-order**
+  - **process-order**
+  - **notification** 
+- Update the projectId constant in the **ContractTest** class to point to your Google PubSub project:
 ```kotlin
  private const val projectId = "pub-sub-demo-414308"
 ```
-You would also need to then setup some authentication mechanism using one of the options described [here](https://cloud.google.com/docs/authentication/provide-credentials-adc#how-to).
-
+- You would also need to then set up some authentication mechanism using one of the options described [here](https://cloud.google.com/docs/authentication/provide-credentials-adc#how-to).  
+  - **Service Account with Key**  
+    If you are planning to use a service account key, update this line in **build.gradle** with the location of the key file:  
+    ```
+       environment "GOOGLE_APPLICATION_CREDENTIALS", ""
+    ```
+  - **User Credentials / Service Account with Impersonation**  
+    If you are planning to use either your google user credentials or impersonate a Service Account, then after configuring your credentials, remove this line from **build.gradle**
+    ```
+       environment "GOOGLE_APPLICATION_CREDENTIALS", ""
+    ```
 
 ## Running Tests
 You can directly run tests from your IDE from the ContractTest class, or via the shell:
