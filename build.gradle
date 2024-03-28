@@ -46,6 +46,6 @@ tasks.named('test') {
 
 test {
     useJUnitPlatform()
-    environment "GOOGLE_APPLICATION_CREDENTIALS", "keys/pub-sub-demo-414308-6d045daad463.json"
+    environment "GOOGLE_APPLICATION_CREDENTIALS", ""
     testLogging.showStandardStreams = true
 }
