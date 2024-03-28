@@ -45,10 +45,16 @@ Here's the structure of a contract test:
   - **place-order**
   - **process-order**
   - **notification** 
-- Update the projectId constant in the **ContractTest** class to point to your Google PubSub project:
-```kotlin
- private const val projectId = "pub-sub-demo-414308"
-```
+- Update the following with your Google PubSub project id:
+  - **application.properties** (src/main/resources/)  
+   ```yaml
+  google.pubsub.projectId=pub-sub-demo-414308
+  ```
+  - **ContractTest**
+  ```kotlin
+   private const val projectId = "pub-sub-demo-414308"
+  ```
+  
 - You would also need to then set up some authentication mechanism using one of the options described [here](https://cloud.google.com/docs/authentication/provide-credentials-adc#how-to).  
   - **Service Account with Key**  
     If you are planning to use a service account key, update this line in **build.gradle** with the location of the key file:  

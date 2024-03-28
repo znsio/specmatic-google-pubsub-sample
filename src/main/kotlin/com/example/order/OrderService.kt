@@ -10,26 +10,25 @@ import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
 private const val ORDERERVICE_SUBSCRIPTION_PREFIX = "orderservice-subscription"
-private const val projectId = "pub-sub-demo-414308"
 private const val ORDER_STATUS_PROCESSED = "PROCESSED"
 private const val ORDER_STATUS_CANCELLED = "CANCELLED"
 private const val NOTIFICATION_TYPE_ORDER_PLACED = "ORDER_PLACED"
 private const val SERVICE_NAME = "Order Service"
 
 @Service
-class OrderService {
+class OrderService(private val config: Configuration) {
 
     private val placeOrderTopic = "place-order"
     private val processOrderTopic = "process-order"
     private val notificationTopic = "notification"
-    private val googlePubSubClient = GooglePubSubClient(projectId, SERVICE_NAME)
+    private val googlePubSubClient = GooglePubSubClient(config.projectId, SERVICE_NAME)
     private val gson = Gson()
 
 
     fun run() {
         val subscriptionId = "$ORDERERVICE_SUBSCRIPTION_PREFIX-$placeOrderTopic"
-        val subscriptionName = ProjectSubscriptionName.format(projectId, subscriptionId)
-        val topicName = ProjectTopicName.format(projectId, placeOrderTopic)
+        val subscriptionName = ProjectSubscriptionName.format(config.projectId, subscriptionId)
+        val topicName = ProjectTopicName.format(config.projectId, placeOrderTopic)
 
         println("Creating subscription $subscriptionName for topic $topicName")
         googlePubSubClient.createPullSubscription(topicName, subscriptionName)
