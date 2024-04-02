@@ -1,22 +1,32 @@
 package com.example.order
 
 import com.google.api.core.ApiFuture
-import com.google.cloud.pubsub.v1.Publisher
-import com.google.cloud.pubsub.v1.SubscriptionAdminClient
+import com.google.api.gax.core.CredentialsProvider
+import com.google.api.gax.core.NoCredentialsProvider
+import com.google.api.gax.grpc.GrpcTransportChannel
+import com.google.api.gax.rpc.FixedTransportChannelProvider
+import com.google.api.gax.rpc.TransportChannelProvider
+import com.google.cloud.pubsub.v1.*
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.google.protobuf.ByteString
 import com.google.pubsub.v1.*
+import io.grpc.ManagedChannel
+import io.grpc.ManagedChannelBuilder
 import java.lang.StringBuilder
 import java.util.concurrent.TimeUnit
 
 
 class GooglePubSubClient(private val projectId:String, private val serviceName: String) {
 
+    private val emulatorHost: String? = System.getenv("PUBSUB_EMULATOR_HOST")
+    private val emulatorChannel: ManagedChannel? =
+        emulatorHost?.let{ ManagedChannelBuilder.forTarget(it).usePlaintext().build() }
+
     private val gson = GsonBuilder().setPrettyPrinting().create()
 
     fun createPullSubscription(topicName:String, subscriptionName:String) {
-        SubscriptionAdminClient.create().use { subscriptionAdminClient ->
+        subscriptionAdminClient().use { subscriptionAdminClient ->
             val subscriptionExists = subscriptionAdminClient.listSubscriptions(ProjectName.format(projectId))
                 .iterateAll()
                 .any { it.name == subscriptionName }
@@ -40,7 +50,7 @@ class GooglePubSubClient(private val projectId:String, private val serviceName: 
         var publisher: Publisher? = null
         try {
             // Create a publisher instance with default settings bound to the topic
-            publisher = Publisher.newBuilder(topicName).build()
+            publisher = publisher(topicName)
             val data: ByteString = ByteString.copyFromUtf8(message)
             val pubsubMessage = PubsubMessage.newBuilder().setData(data).putAllAttributes(attributes).build()
 
@@ -71,5 +81,47 @@ class GooglePubSubClient(private val projectId:String, private val serviceName: 
             append("Attributes: ${gson.toJson(attributes)}")
             append(System.lineSeparator())
         }.toString()
+    }
+
+    fun createSubscriber(subscriptionName: String, messageReceiver: (PubsubMessage, AckReplyConsumer) -> Unit): Subscriber {
+        return emulatorChannel?.let {
+            val channelProvider: TransportChannelProvider =
+                FixedTransportChannelProvider.create(GrpcTransportChannel.create(it))
+            val credentialsProvider: CredentialsProvider = NoCredentialsProvider.create()
+            Subscriber.newBuilder(subscriptionName, messageReceiver)
+                .setChannelProvider(channelProvider)
+                .setCredentialsProvider(credentialsProvider)
+                .build()
+        } ?: Subscriber.newBuilder(subscriptionName, messageReceiver)
+            .build()
+    }
+
+    private fun subscriptionAdminClient(): SubscriptionAdminClient {
+        return emulatorChannel?.let {
+            val channelProvider: TransportChannelProvider =
+                FixedTransportChannelProvider.create(GrpcTransportChannel.create(it))
+            val credentialsProvider: CredentialsProvider = NoCredentialsProvider.create()
+            SubscriptionAdminClient.create(
+                SubscriptionAdminSettings.newBuilder()
+                    .setTransportChannelProvider(channelProvider)
+                    .setCredentialsProvider(credentialsProvider)
+                    .build()
+            )
+
+        } ?: SubscriptionAdminClient.create()
+    }
+
+    private fun publisher(topicName: TopicName): Publisher {
+        return emulatorChannel?.let {
+            val channelProvider: TransportChannelProvider =
+                FixedTransportChannelProvider.create(GrpcTransportChannel.create(it))
+            val credentialsProvider: CredentialsProvider = NoCredentialsProvider.create()
+
+            Publisher.newBuilder(topicName)
+                .setChannelProvider(channelProvider)
+                .setCredentialsProvider(credentialsProvider)
+                .build()
+
+        } ?: Publisher.newBuilder(topicName).build()
     }
 }

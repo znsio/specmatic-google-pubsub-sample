@@ -39,12 +39,31 @@ Here's the structure of a contract test:
   - The message received on the **notification** topic is the named example defined for the **notification** topic.  
     The message received should match the message schema for the **notification** topic
 
-## Google PubSub project setup
+## Using the Google PubSub Emulator
+This project is setup to use the Google PubSub emulator by default.  
+Here are the steps to start and configure the emulator:
 
-- Create the following three topics in your Google PubSub project: 
+- From a terminal window, run the following command
+  ```
+  gcloud beta emulators pubsub start
+  ```
+  
+- From another window, run the following three commands to create the topics:  
+  ```
+  curl -X PUT http://localhost:8085/v1/projects/pub-sub-demo-414308/topics/place-order
+  curl -X PUT http://localhost:8085/v1/projects/pub-sub-demo-414308/topics/process-order
+  curl -X PUT http://localhost:8085/v1/projects/pub-sub-demo-414308/topics/notification
+  ```
+
+
+## Using a live Google PubSub project
+You can also run your tests against a real/live Google PubSub project.
+Here are the steps:
+- Create the following three topics in your project: 
   - **place-order**
   - **process-order**
   - **notification** 
+
 - Update the following with your Google PubSub project id:
   - **application.properties** (src/main/resources/)  
    ```yaml
@@ -54,17 +73,15 @@ Here's the structure of a contract test:
   ```kotlin
    private const val projectId = "pub-sub-demo-414308"
   ```
-  
-- You would also need to then set up some authentication mechanism using one of the options described [here](https://cloud.google.com/docs/authentication/provide-credentials-adc#how-to).  
+- Remove the following line from the `test` section in **build.gradle**  
+  ```
+  environment "PUBSUB_EMULATOR_HOST", "localhost:8085"
+  ```
+- You would need to then set up some authentication mechanism using one of the options described [here](https://cloud.google.com/docs/authentication/provide-credentials-adc#how-to).  
   - **Service Account with Key**  
-    If you are planning to use a service account key, update this line in **build.gradle** with the location of the key file:  
+    If you are planning to use a service account key, add this line in **build.gradle** in the `test` section after `useJUnitPlatform()`:  
     ```
-       environment "GOOGLE_APPLICATION_CREDENTIALS", ""
-    ```
-  - **User Credentials / Service Account with Impersonation**  
-    If you are planning to use either your google user credentials or impersonate a Service Account, then after configuring your credentials, remove this line from **build.gradle**
-    ```
-       environment "GOOGLE_APPLICATION_CREDENTIALS", ""
+       environment "GOOGLE_APPLICATION_CREDENTIALS", "<path to your key file>"
     ```
 
 ## Running Tests

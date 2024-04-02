@@ -46,6 +46,6 @@ tasks.named('test') {
 
 test {
     useJUnitPlatform()
-    environment "GOOGLE_APPLICATION_CREDENTIALS", ""
+    environment "PUBSUB_EMULATOR_HOST", "localhost:8085"
     testLogging.showStandardStreams = true
 }

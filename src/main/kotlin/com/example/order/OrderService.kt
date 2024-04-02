@@ -1,7 +1,6 @@
 package com.example.order
 
 import com.google.cloud.pubsub.v1.AckReplyConsumer
-import com.google.cloud.pubsub.v1.Subscriber
 import com.google.gson.Gson
 import com.google.pubsub.v1.ProjectSubscriptionName
 import com.google.pubsub.v1.ProjectTopicName
@@ -37,7 +36,7 @@ class OrderService(private val config: Configuration) {
             processMessage(placeOrderTopic, message.data.toStringUtf8(), message.attributesMap)
             consumer.ack()
         }
-        val subscriber = Subscriber.newBuilder(subscriptionName, messageReceiver).build()
+        val subscriber = googlePubSubClient.createSubscriber(subscriptionName, messageReceiver)
         try {
             subscriber.startAsync().awaitRunning()
             System.out.printf("Listening for messages on subscription: %s:\n", subscriptionName)
