@@ -8,6 +8,7 @@ This sample project demonstrates how we can run contract tests against a service
 ## Pre-requisites
 * Gradle
 * JDK 17+
+* Docker
 
 ## Order Service
 The service under test is: **Order Service**.  
@@ -44,17 +45,9 @@ This project is setup to use the Google PubSub emulator by default.
 Here are the steps to start and configure the emulator:
 
 - From a terminal window, run the following command
+  ```shell
+  docker compose up --build
   ```
-  gcloud beta emulators pubsub start
-  ```
-  
-- From another window, run the following three commands to create the topics:  
-  ```
-  curl -X PUT http://localhost:8085/v1/projects/pub-sub-demo-414308/topics/place-order
-  curl -X PUT http://localhost:8085/v1/projects/pub-sub-demo-414308/topics/process-order
-  curl -X PUT http://localhost:8085/v1/projects/pub-sub-demo-414308/topics/notification
-  ```
-
 
 ## Using a live Google PubSub project
 You can also run your tests against a real/live Google PubSub project.
