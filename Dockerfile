@@ -1,8 +1,5 @@
-# Use an official Google Cloud SDK image as the base
-FROM google/cloud-sdk:latest
-
-# Install the Pub/Sub emulator using apt-get
-RUN apt-get install google-cloud-sdk-pubsub-emulator -y
+# Use the official Pub/Sub emulator image
+FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
 
 # Set the environment variable for the Pub/Sub emulator's port
 ENV PUBSUB_EMULATOR_HOST=localhost:8085
