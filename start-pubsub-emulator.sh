@@ -22,5 +22,7 @@ create_topic "pub-sub-demo-414308" "place-order"
 create_topic "pub-sub-demo-414308" "process-order"
 create_topic "pub-sub-demo-414308" "notification"
 
+echo "The Google PubSub emulator is now ready"
+
 # Keep the script running to not terminate the Docker container
 wait $EMULATOR_PID
