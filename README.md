@@ -78,7 +78,8 @@ Here are the steps:
     ```
 
 ## Running Tests
-You can directly run tests from your IDE from the ContractTest class, or via the shell:
+Start the docker runtime (Docker Desktop, Lima, etc.).
+Run the following command -
 ```shell
 ./gradlew clean test
 ```

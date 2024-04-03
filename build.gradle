@@ -31,17 +31,14 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
     testImplementation("org.assertj:assertj-core:3.24.2")
     testImplementation 'org.junit.jupiter:junit-jupiter:5.6.0'
+    testImplementation 'org.testcontainers:testcontainers:1.18.3'
 }
 
-tasks.withType(KotlinCompile) {
+tasks.withType(KotlinCompile).configureEach {
     kotlinOptions {
         freeCompilerArgs += '-Xjsr305=strict'
         jvmTarget = '17'
     }
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
 }
 
 test {
