@@ -46,7 +46,7 @@ Here are the steps to start and configure the emulator:
 
 - From a terminal window, run the following command
   ```shell
-  docker compose up --build
+  docker-compose up --build
   ```
 
 ## Using a live Google PubSub project
@@ -78,8 +78,8 @@ Here are the steps:
     ```
 
 ## Running Tests
-Start the docker runtime (Docker Desktop, Lima, etc.).
-Run the following command -
+1. Start the docker runtime (e.g. Docker Desktop, Lima).
+2. Run the following command -
 ```shell
 ./gradlew clean test
 ```
