@@ -42,12 +42,23 @@ Here's the structure of a contract test:
 
 ## Using the Google PubSub Emulator
 This project is setup to use the Google PubSub emulator by default.  
-Here are the steps to start and configure the emulator:
+We have provided a utility class ```PubSubEmulator``` with helps you start the Google PubSub emulator.  
+Here's how to create the pubsub emulator by specifying your **project id** and a list of topics:
+```kotlin
+private val pubSubEmulator = PubSubEmulator(
+            projectId = PROJECT_ID,
+            topics = listOf(PLACE_ORDER_TOPIC, PROCESS_ORDER_TOPIC, NOTIFICATION_TOPIC),
+        )
+```
+Start the emulator in your ```@BeforeAll``` method
+```kotlin
+pubSubEmulator.start()
+```
 
-- From a terminal window, run the following command
-  ```shell
-  docker-compose up --build
-  ```
+Stop the emulator in your ```@AfterAll``` method
+```kotlin
+pubSubEmulator.stop()
+```
 
 ## Using a live Google PubSub project
 You can also run your tests against a real/live Google PubSub project.
