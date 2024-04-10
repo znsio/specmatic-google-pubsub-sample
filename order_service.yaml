@@ -72,7 +72,7 @@ components:
       payload:
         type: object
         required:
-          - totalPrice
+          - totalAmount
           - status
         properties:
           orderRequestId:
