@@ -1,9 +1,10 @@
 {
   "sources": [
     {
-      "provider": "filesystem",
+      "provider": "git",
+      "repository": "https://github.com/znsio/specmatic-order-contracts.git",
       "test": [
-        "order_service.yaml"
+        "in/specmatic/examples/store/order_service_pubsub_v1.yaml"
       ]
     }
   ]
