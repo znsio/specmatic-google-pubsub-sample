@@ -48,5 +48,17 @@ test {
     testLogging {
         showStandardStreams = true
         events "passed", "skipped", "failed"
+        afterSuite { desc, result ->
+            if (desc.parent == null) {
+                println()
+                println("-------------------------")
+                println("Total tests run: ${result.testCount}")
+                println("Tests passed: ${result.successfulTestCount}")
+                println("Tests failed: ${result.failedTestCount}")
+                println("Tests skipped: ${result.skippedTestCount}")
+                println("-------------------------")
+                println()
+            }
+        }
     }
 }
