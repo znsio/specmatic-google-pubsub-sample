@@ -45,4 +45,8 @@ test {
     useJUnitPlatform()
     environment "PUBSUB_EMULATOR_HOST", "localhost:8085"
     testLogging.showStandardStreams = true
+    testLogging {
+        showStandardStreams = true
+        events "passed", "skipped", "failed"
+    }
 }
