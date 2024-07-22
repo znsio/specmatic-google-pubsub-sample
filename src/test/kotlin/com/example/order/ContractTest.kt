@@ -1,8 +1,8 @@
 package com.example.order
 
 import com.example.order.utils.PubSubEmulator
-import `in`.specmatic.googlepubsub.mock.GooglePubSubMock
-import `in`.specmatic.googlepubsub.mock.SpecmaticGooglePubSubTestBase
+import io.specmatic.googlepubsub.mock.GooglePubSubMock
+import io.specmatic.googlepubsub.mock.SpecmaticGooglePubSubTestBase
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
