@@ -1,6 +1,6 @@
 sources:
   - provider: git
     repository: https://github.com/znsio/specmatic-order-contracts.git
-    test:
+    provides:
       - io/specmatic/examples/store/asyncapi/order_service_async_v1.yaml
 
