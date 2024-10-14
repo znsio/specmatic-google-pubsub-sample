@@ -39,4 +39,8 @@ out/
 ### Kotlin ###
 .kotlin
 
+### Specmatic ###
 .specmatic
+
+### jenv ###
+.java-version
