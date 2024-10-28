@@ -11,7 +11,6 @@ import java.util.function.Consumer
 
 class PubSubEmulator(
     private val projectId: String,
-    private val topics: List<String> = emptyList(),
 ) {
     private val port = 8085
     private val host = "localhost:$port"
@@ -21,7 +20,6 @@ class PubSubEmulator(
 
     fun start() {
         emulator.start()
-        createTopics()
         logStartupMessage()
         emulator.waitingFor(Wait.forLogMessage(startupMessage, 1))
     }
@@ -43,18 +41,6 @@ class PubSubEmulator(
             .withCreateContainerCmdModifier(bindContainerPortToHost)
             .withEnv("PUBSUB_EMULATOR_HOST", host)
             .withCommand("gcloud beta emulators pubsub start --project=$projectId --host-port=0.0.0.0:$port")
-    }
-
-    private fun createTopics() {
-        val createTopicUrl = "http://$host/v1/projects/$projectId/topics"
-
-        topics.forEach { topic ->
-            emulator.execInContainer(
-                "/bin/bash",
-                "-c",
-                "curl -X PUT $createTopicUrl/$topic"
-            )
-        }
     }
 
     private fun logStartupMessage() = emulator.execInContainer(

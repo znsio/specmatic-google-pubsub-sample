@@ -38,11 +38,11 @@
         {
           "name": "specmatic-googlepubsub-0.1.1-TRIAL.jar",
           "url": "specmatic-googlepubsub-0.1.1-TRIAL.jar",
-          "size": 113018,
-          "sha512": "dd84516ec7d7069040ddcc895d62b33a0618857c7b3c7855072392c8399d444f981470fc69261d1b1fd290de2e3f95bda70b9f62a625f932788298b1ddddf4dc",
-          "sha256": "6be40d352b88a650e1ba2df45fcb16efaab81236eba3cdcc2eee7e9237a8f697",
-          "sha1": "523fbc58d19dcdcea0ee9d30af33a4826a9c8718",
-          "md5": "b75b44c2e3de783bc15318da71ff03f4"
+          "size": 113006,
+          "sha512": "6c2aa4038fb894e83303a8352a22bb9883f0b6d1a913c5bbfb19ad2fa2b0ade19907484171e2afc0bdd7138fa79f3abb30e3ebad2e23bb10d2405c26b9729c72",
+          "sha256": "1c6aae603701d71c1164778a7e02661ee66faf2429533d63694b11bf15cac903",
+          "sha1": "a399a2390bf601d0b0fd10a928fac8836d330233",
+          "md5": "dbf48030b0d659aa9e5a9a27a97d0630"
         }
       ]
     },
@@ -148,11 +148,11 @@
         {
           "name": "specmatic-googlepubsub-0.1.1-TRIAL.jar",
           "url": "specmatic-googlepubsub-0.1.1-TRIAL.jar",
-          "size": 113018,
-          "sha512": "dd84516ec7d7069040ddcc895d62b33a0618857c7b3c7855072392c8399d444f981470fc69261d1b1fd290de2e3f95bda70b9f62a625f932788298b1ddddf4dc",
-          "sha256": "6be40d352b88a650e1ba2df45fcb16efaab81236eba3cdcc2eee7e9237a8f697",
-          "sha1": "523fbc58d19dcdcea0ee9d30af33a4826a9c8718",
-          "md5": "b75b44c2e3de783bc15318da71ff03f4"
+          "size": 113006,
+          "sha512": "6c2aa4038fb894e83303a8352a22bb9883f0b6d1a913c5bbfb19ad2fa2b0ade19907484171e2afc0bdd7138fa79f3abb30e3ebad2e23bb10d2405c26b9729c72",
+          "sha256": "1c6aae603701d71c1164778a7e02661ee66faf2429533d63694b11bf15cac903",
+          "sha1": "a399a2390bf601d0b0fd10a928fac8836d330233",
+          "md5": "dbf48030b0d659aa9e5a9a27a97d0630"
         }
       ]
     }
