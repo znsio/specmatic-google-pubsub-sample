@@ -1,0 +1,160 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "io.specmatic",
+    "module": "specmatic-googlepubsub",
+    "version": "0.1.1-TRIAL",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.6"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.9.21"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "specmatic-googlepubsub-0.1.1-TRIAL.jar",
+          "url": "specmatic-googlepubsub-0.1.1-TRIAL.jar",
+          "size": 113018,
+          "sha512": "dd84516ec7d7069040ddcc895d62b33a0618857c7b3c7855072392c8399d444f981470fc69261d1b1fd290de2e3f95bda70b9f62a625f932788298b1ddddf4dc",
+          "sha256": "6be40d352b88a650e1ba2df45fcb16efaab81236eba3cdcc2eee7e9237a8f697",
+          "sha1": "523fbc58d19dcdcea0ee9d30af33a4826a9c8718",
+          "md5": "b75b44c2e3de783bc15318da71ff03f4"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.cloud",
+          "module": "libraries-bom",
+          "version": {
+            "requires": "26.32.0"
+          },
+          "attributes": {
+            "org.gradle.category": "platform"
+          },
+          "endorseStrictVersions": true
+        },
+        {
+          "group": "com.google.cloud",
+          "module": "google-cloud-pubsub"
+        },
+        {
+          "group": "com.fasterxml.jackson.dataformat",
+          "module": "jackson-dataformat-yaml",
+          "version": {
+            "requires": "2.14.0"
+          }
+        },
+        {
+          "group": "com.asyncapi",
+          "module": "asyncapi-core",
+          "version": {
+            "requires": "1.0.0-EAP-3"
+          }
+        },
+        {
+          "group": "org.assertj",
+          "module": "assertj-core",
+          "version": {
+            "requires": "3.24.2"
+          }
+        },
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-nop",
+          "version": {
+            "requires": "2.0.3"
+          }
+        },
+        {
+          "group": "io.specmatic",
+          "module": "specmatic-core",
+          "version": {
+            "requires": "2.0.27"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-serialization-json",
+          "version": {
+            "requires": "1.3.2"
+          }
+        },
+        {
+          "group": "com.fasterxml.jackson.core",
+          "module": "jackson-databind",
+          "version": {
+            "requires": "2.16.0"
+          }
+        },
+        {
+          "group": "com.fasterxml.jackson.module",
+          "module": "jackson-module-kotlin",
+          "version": {
+            "requires": "2.15.3"
+          }
+        },
+        {
+          "group": "org.junit.jupiter",
+          "module": "junit-jupiter-api",
+          "version": {
+            "requires": "5.10.2"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.9.21"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "specmatic-googlepubsub-0.1.1-TRIAL.jar",
+          "url": "specmatic-googlepubsub-0.1.1-TRIAL.jar",
+          "size": 113018,
+          "sha512": "dd84516ec7d7069040ddcc895d62b33a0618857c7b3c7855072392c8399d444f981470fc69261d1b1fd290de2e3f95bda70b9f62a625f932788298b1ddddf4dc",
+          "sha256": "6be40d352b88a650e1ba2df45fcb16efaab81236eba3cdcc2eee7e9237a8f697",
+          "sha1": "523fbc58d19dcdcea0ee9d30af33a4826a9c8718",
+          "md5": "b75b44c2e3de783bc15318da71ff03f4"
+        }
+      ]
+    }
+  ]
+}

@@ -15,8 +15,8 @@ java {
 }
 
 repositories {
+    maven { url uri("lib") }
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
@@ -26,7 +26,7 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation platform('com.google.cloud:libraries-bom:26.32.0')
     implementation 'com.google.cloud:google-cloud-pubsub'
-    implementation 'io.specmatic:specmatic-googlepubsub:0.1.1'
+    implementation 'io.specmatic:specmatic-googlepubsub:0.1.1-TRIAL'
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
     implementation 'com.google.code.gson:gson:2.8.9'
     testImplementation("org.assertj:assertj-core:3.24.2")
