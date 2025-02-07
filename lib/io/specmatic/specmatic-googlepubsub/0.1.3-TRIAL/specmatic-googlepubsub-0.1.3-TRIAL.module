@@ -3,7 +3,7 @@
   "component": {
     "group": "io.specmatic",
     "module": "specmatic-googlepubsub",
-    "version": "0.1.1-TRIAL",
+    "version": "0.1.3-TRIAL",
     "attributes": {
       "org.gradle.status": "release"
     }
@@ -36,13 +36,13 @@
       ],
       "files": [
         {
-          "name": "specmatic-googlepubsub-0.1.1-TRIAL.jar",
-          "url": "specmatic-googlepubsub-0.1.1-TRIAL.jar",
-          "size": 113006,
-          "sha512": "6c2aa4038fb894e83303a8352a22bb9883f0b6d1a913c5bbfb19ad2fa2b0ade19907484171e2afc0bdd7138fa79f3abb30e3ebad2e23bb10d2405c26b9729c72",
-          "sha256": "1c6aae603701d71c1164778a7e02661ee66faf2429533d63694b11bf15cac903",
-          "sha1": "a399a2390bf601d0b0fd10a928fac8836d330233",
-          "md5": "dbf48030b0d659aa9e5a9a27a97d0630"
+          "name": "specmatic-googlepubsub-0.1.3-TRIAL.jar",
+          "url": "specmatic-googlepubsub-0.1.3-TRIAL.jar",
+          "size": 229973,
+          "sha512": "98b42b532df40f16e632963dfe9d620dd792d922dd17d64601641450bf4dab8b111a2df0744d74e233fa08bdf9254500588bb2eae72b19289abe54513ce2de33",
+          "sha256": "669e3c408c2d55a57950ab8bf858e68dc5b88b5dcf969c89f2e3d1408e4be0f1",
+          "sha1": "6ab7c9c0ae46f83786cf88c03137e6100d9a2bfd",
+          "md5": "b536e2f8ef69865b945a9d8494f475ea"
         }
       ]
     },
@@ -74,18 +74,25 @@
           "module": "google-cloud-pubsub"
         },
         {
-          "group": "com.fasterxml.jackson.dataformat",
-          "module": "jackson-dataformat-yaml",
-          "version": {
-            "requires": "2.14.0"
-          }
-        },
-        {
           "group": "com.asyncapi",
           "module": "asyncapi-core",
           "version": {
-            "requires": "1.0.0-EAP-3"
-          }
+            "requires": "1.0.0-RC2"
+          },
+          "excludes": [
+            {
+              "group": "com.fasterxml.jackson.core",
+              "module": "jackson-databind"
+            },
+            {
+              "group": "com.fasterxml.jackson.module",
+              "module": "jackson-module-kotlin"
+            },
+            {
+              "group": "com.fasterxml.jackson.dataformat",
+              "module": "jackson-dataformat-yaml"
+            }
+          ]
         },
         {
           "group": "org.assertj",
@@ -105,7 +112,7 @@
           "group": "io.specmatic",
           "module": "specmatic-core",
           "version": {
-            "requires": "2.0.27"
+            "requires": "2.3.0"
           }
         },
         {
@@ -116,15 +123,29 @@
           }
         },
         {
+          "group": "org.jetbrains.kotlinx",
+          "module": "kotlinx-serialization-json-jvm",
+          "version": {
+            "requires": "1.6.1"
+          }
+        },
+        {
           "group": "com.fasterxml.jackson.core",
           "module": "jackson-databind",
           "version": {
-            "requires": "2.16.0"
+            "requires": "2.15.3"
           }
         },
         {
           "group": "com.fasterxml.jackson.module",
           "module": "jackson-module-kotlin",
+          "version": {
+            "requires": "2.15.3"
+          }
+        },
+        {
+          "group": "com.fasterxml.jackson.dataformat",
+          "module": "jackson-dataformat-yaml",
           "version": {
             "requires": "2.15.3"
           }
@@ -146,13 +167,13 @@
       ],
       "files": [
         {
-          "name": "specmatic-googlepubsub-0.1.1-TRIAL.jar",
-          "url": "specmatic-googlepubsub-0.1.1-TRIAL.jar",
-          "size": 113006,
-          "sha512": "6c2aa4038fb894e83303a8352a22bb9883f0b6d1a913c5bbfb19ad2fa2b0ade19907484171e2afc0bdd7138fa79f3abb30e3ebad2e23bb10d2405c26b9729c72",
-          "sha256": "1c6aae603701d71c1164778a7e02661ee66faf2429533d63694b11bf15cac903",
-          "sha1": "a399a2390bf601d0b0fd10a928fac8836d330233",
-          "md5": "dbf48030b0d659aa9e5a9a27a97d0630"
+          "name": "specmatic-googlepubsub-0.1.3-TRIAL.jar",
+          "url": "specmatic-googlepubsub-0.1.3-TRIAL.jar",
+          "size": 229973,
+          "sha512": "98b42b532df40f16e632963dfe9d620dd792d922dd17d64601641450bf4dab8b111a2df0744d74e233fa08bdf9254500588bb2eae72b19289abe54513ce2de33",
+          "sha256": "669e3c408c2d55a57950ab8bf858e68dc5b88b5dcf969c89f2e3d1408e4be0f1",
+          "sha1": "6ab7c9c0ae46f83786cf88c03137e6100d9a2bfd",
+          "md5": "b536e2f8ef69865b945a9d8494f475ea"
         }
       ]
     }
