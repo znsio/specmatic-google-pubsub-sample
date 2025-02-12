@@ -59,7 +59,7 @@ class OrderService(private val config: Configuration) {
         val totalAmount = orderRequest.orderItems.sumOf { it.price * BigDecimal(it.quantity) }
         val taskMessage = """{"totalAmount": $totalAmount, "status": "$ORDER_STATUS_PROCESSED"}"""
 
-        googlePubSubClient.publish(processOrderTopic, taskMessage, mapOf("SOURCE_ID" to SERVICE_NAME))
+        googlePubSubClient.publish(processOrderTopic, taskMessage)
     }
 
     private fun sendMessageOnNotificationTopic() {
