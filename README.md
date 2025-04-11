@@ -20,7 +20,7 @@ This sample project demonstrates how we can run contract tests against a service
 ## Application Architecture
 The service under test is: **Order Service**.  
 It listens for messages on a Google PubSub topic called **'place-order'**.  
-For every message it receives, it sends a message on a Google PubSub topics: **process-order** and **notification**.  
+For every message it receives, it sends a message on a Google PubSub topic: **process-order** 
 We also have an async api specification defined for the Order Service in the **order_service.yaml** file.  
 The **order_service.yaml** is defined as a 'test' contract in the [specmatic.json](https://specmatic.in/documentation/specmatic_json.html) file.
 
@@ -36,14 +36,12 @@ Here's the structure of a contract test:
 - Specmatic will use the named example defined for the **'place-order'** topic and publish a message on the **'place-order'** topic.  
   If the example message does not match the message schema of the the **'place-order'** topic, the test will fail.
 
-- Specmatic will wait for the Order Service to process the message and publish a message on the **'process-order'** and **'notification'** topics.
+- Specmatic will wait for the Order Service to process the message and publish a message on the **'process-order'** topic.
 
 - Specmatic will then assert that :
-  - Exactly one message each is received on the **process-order** and **'notification'** topics
+  - Exactly one message each is received on the **process-order** topic
   - The message received on the **process-order** topic is the named example defined for the **'process-order'** topic.  
     The message received should match the message schema for the **process-order** topic
-  - The message received on the **notification** topic is the named example defined for the **notification** topic.  
-    The message received should match the message schema for the **notification** topic
 
 ## Running the tests with the Google PubSub Emulator
 This project is setup to use the Google PubSub emulator by default.  
@@ -59,7 +57,7 @@ test {
 ```kotlin
 private val pubSubEmulator = PubSubEmulator(
             projectId = PROJECT_ID,
-            topics = listOf(PLACE_ORDER_TOPIC, PROCESS_ORDER_TOPIC, NOTIFICATION_TOPIC),
+            topics = listOf(PLACE_ORDER_TOPIC, PROCESS_ORDER_TOPIC),
         )
 ```
 3. Start the emulator in your ```@BeforeAll``` method
@@ -78,7 +76,6 @@ Here are the steps:
 - Create the following three topics in your project: 
   - **place-order**
   - **process-order**
-  - **notification** 
 
 - Update the following with your Google PubSub project id:
   - **application.properties** (src/main/resources/)  
