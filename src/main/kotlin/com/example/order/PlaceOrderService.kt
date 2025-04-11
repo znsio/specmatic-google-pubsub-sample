@@ -53,7 +53,7 @@ class PlaceOrderService(private val config: Configuration): ApplicationRunner {
     private fun sendMessageOnProcessOrderTopic(message: String) {
         val orderRequest = gson.fromJson(message, OrderRequest::class.java)
         val totalAmount = orderRequest.orderItems.sumOf { it.price * BigDecimal(it.quantity) }
-        val taskMessage = """{"totalAmount": $totalAmount, "status": "$ORDER_STATUS_PROCESSED"}"""
+        val taskMessage = """{"id": 10, "totalAmount": $totalAmount, "status": "$ORDER_STATUS_PROCESSED"}"""
 
         googlePubSubClient.publish(processOrderTopic, taskMessage, mapOf("SOURCE_ID" to SERVICE_NAME))
         println("[$SERVICE_NAME] Published a message on topic $processOrderTopic: $taskMessage")
