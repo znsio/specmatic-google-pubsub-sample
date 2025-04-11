@@ -51,10 +51,10 @@ class CancelOrderService(private val config: Configuration): ApplicationRunner {
 
     private fun sendMessageOnProcessCancellationTopic(message: String) {
         val cancellationRequest = gson.fromJson(message, OrderId::class.java)
-        val taskMessage = """{"reference": 345, "status": "$ORDER_STATUS"}"""
+        val taskMessage = """{"reference": ${cancellationRequest.id}, "status": "$ORDER_STATUS"}"""
 
+        println("[$SERVICE_NAME] Publishing a message on topic $processCancellationTopic: $taskMessage")
         googlePubSubClient.publish(processCancellationTopic, taskMessage, mapOf("SOURCE_ID" to SERVICE_NAME))
-        println("[$SERVICE_NAME] Published a message on topic $processCancellationTopic: $taskMessage")
     }
 }
 
