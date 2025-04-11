@@ -1,7 +1,7 @@
 # Specmatic Google PubSub Sample
 
 * [Specmatic Website](https://specmatic.in)
-* [Specmatic Documenation](https://specmatic.in/documentation.html)
+* [Specmatic Documentation](https://specmatic.in/documentation.html)
 
 This sample project demonstrates how we can run contract tests against a service which interacts with a Google PubSub instance. 
 
