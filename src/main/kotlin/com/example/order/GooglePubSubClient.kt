@@ -16,7 +16,6 @@ import io.grpc.ManagedChannelBuilder
 import java.lang.StringBuilder
 import java.util.concurrent.TimeUnit
 
-
 class GooglePubSubClient(private val projectId:String, private val serviceName: String) {
 
     private val emulatorHost: String? = System.getenv("PUBSUB_EMULATOR_HOST")
@@ -59,7 +58,7 @@ class GooglePubSubClient(private val projectId:String, private val serviceName: 
             val messageId = messageIdFuture.get()
 
             val prettyPrintedMessage = prettyPrintedMessage(message, attributes)
-            println("$serviceName has published a message wih ID: $messageId on topic: $topicId: $prettyPrintedMessage")
+            println("[$serviceName] has published a message wih ID: $messageId on topic: $topicId: $prettyPrintedMessage")
             prettyPrintedMessage(message, attributes)
         } finally {
             if (publisher != null) {

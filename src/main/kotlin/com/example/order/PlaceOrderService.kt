@@ -5,29 +5,28 @@ import com.google.gson.Gson
 import com.google.pubsub.v1.ProjectSubscriptionName
 import com.google.pubsub.v1.ProjectTopicName
 import com.google.pubsub.v1.PubsubMessage
+import org.springframework.boot.ApplicationArguments
+import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
-private const val ORDERERVICE_SUBSCRIPTION_PREFIX = "orderservice-subscription"
+private const val ORDER_SERVICE_SUBSCRIPTION_PREFIX = "orderservice-subscription"
 private const val ORDER_STATUS_PROCESSED = "PROCESSED"
-private const val ORDER_STATUS_CANCELLED = "CANCELLED"
-private const val SERVICE_NAME = "Order Service"
+private const val SERVICE_NAME = "PlaceOrderService"
 
 @Service
-class OrderService(private val config: Configuration) {
-
+class PlaceOrderService(private val config: Configuration): ApplicationRunner {
     private val placeOrderTopic = "place-order"
     private val processOrderTopic = "process-order"
     private val googlePubSubClient = GooglePubSubClient(config.projectId, SERVICE_NAME)
     private val gson = Gson()
 
-
-    fun run() {
-        val subscriptionId = "$ORDERERVICE_SUBSCRIPTION_PREFIX-$placeOrderTopic"
+    override fun run(args: ApplicationArguments?) {
+        val subscriptionId = "$ORDER_SERVICE_SUBSCRIPTION_PREFIX-$placeOrderTopic"
         val subscriptionName = ProjectSubscriptionName.format(config.projectId, subscriptionId)
         val topicName = ProjectTopicName.format(config.projectId, placeOrderTopic)
 
-        println("Creating subscription $subscriptionName for topic $topicName")
+        println("[$SERVICE_NAME] Creating subscription $subscriptionName for topic $topicName")
         googlePubSubClient.createPullSubscription(topicName, subscriptionName)
 
         val messageReceiver = { message: PubsubMessage, consumer: AckReplyConsumer ->
@@ -37,16 +36,16 @@ class OrderService(private val config: Configuration) {
         val subscriber = googlePubSubClient.createSubscriber(subscriptionName, messageReceiver)
         try {
             subscriber.startAsync().awaitRunning()
-            System.out.printf("Listening for messages on subscription: %s:\n", subscriptionName)
+            println("[$SERVICE_NAME] Listening for messages on subscription: $subscriptionName")
         } catch (e: Exception) {
-            println("Exception for $subscriptionName: ${e.message}")
+            println("[$SERVICE_NAME] Exception for $subscriptionName: ${e.message}")
             subscriber.stopAsync()
         }
     }
 
     private fun processMessage(topic:String, message:String, attributes:Map<String, String>) {
         val prettyPrintedMessage = googlePubSubClient.prettyPrintedMessage(message, attributes)
-        println("$SERVICE_NAME received a message on topic $topic: $prettyPrintedMessage")
+        println("[$SERVICE_NAME] Received a message on topic $topic: $prettyPrintedMessage")
 
         sendMessageOnProcessOrderTopic(message)
     }
@@ -57,9 +56,9 @@ class OrderService(private val config: Configuration) {
         val taskMessage = """{"totalAmount": $totalAmount, "status": "$ORDER_STATUS_PROCESSED"}"""
 
         googlePubSubClient.publish(processOrderTopic, taskMessage, mapOf("SOURCE_ID" to SERVICE_NAME))
+        println("[$SERVICE_NAME] Published a message on topic $processOrderTopic: $taskMessage")
     }
 }
-
 
 data class OrderRequest(
     val orderItems: List<OrderItem>,
@@ -72,4 +71,3 @@ data class OrderItem(
     val quantity: Int,
     val price: BigDecimal
 )
-
