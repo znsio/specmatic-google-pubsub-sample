@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.specmatic.googlepubsub</groupId>
   <artifactId>specmatic-google-pubsub-min</artifactId>
-  <version>0.1.5</version>
+  <version>0.1.3</version>
   <name>Specmatic-GraphQL</name>
   <description>Specmatic-GraphQL library</description>
   <url>https://specmatic.io</url>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>com.asyncapi</groupId>
       <artifactId>asyncapi-core</artifactId>
-      <version>1.0.0-RC2</version>
+      <version>1.0.0-RC3</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

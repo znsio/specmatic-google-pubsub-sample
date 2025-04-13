@@ -1,5 +1,6 @@
 package com.example.order
 
+import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
@@ -7,5 +8,5 @@ import org.springframework.boot.runApplication
 class ProductServiceApplication
 
 fun main(args: Array<String>) {
-    runApplication<ProductServiceApplication>(*args)
+    SpringApplication.run(ProductServiceApplication::class.java, *args)
 }
