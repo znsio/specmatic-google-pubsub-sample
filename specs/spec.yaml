@@ -79,7 +79,8 @@ operations:
         curl -s -X POST http://localhost:9000/order/notify
         -H "Content-Type: application/json"
         -d '{"orderId":123,"event":"ORDER_PROCESSED","timestamp":"2025-04-12T14:30:00Z"}'
-    #      timeout: 'P1s'
+      # ISO 8601 Duration Format
+      timeout: 'PT5S'
     channel:
       $ref: '#/channels/NotifyOrderUpdates'
     messages:
