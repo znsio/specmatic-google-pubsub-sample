@@ -1,0 +1,17 @@
+overlay: 1.0.0
+actions:
+  - target: $.operations.orderAccepted
+    update:
+      x-specmatic-trigger:
+        command: >
+          curl -s -X PUT http://localhost:9000/orders
+          -H "Content-Type: application/json"
+          -d '{"id":123,"status":"ACCEPTED","timestamp":"2025-04-12T14:30:00Z"}'
+        timeout: 'PT5S' # ISO 8601 Duration Format
+
+  - target: $.operations.initiateOrderDelivery
+    update:
+      x-specmatic-side-effect:
+        command: >
+          test "$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/orders/123?status=SHIPPED)" = "200"
+        timeout: 'PT5S'

@@ -79,12 +79,6 @@ operations:
         - $ref: '#/channels/OrderCancelled/messages/processCancellation.message'
   orderAccepted:
     action: send
-    x-specmatic-trigger:
-      command: >
-        curl -s -X PUT http://localhost:9000/orders
-        -H "Content-Type: application/json"
-        -d '{"id":123,"status":"ACCEPTED","timestamp":"2025-04-12T14:30:00Z"}'
-      timeout: 'PT5S' # ISO 8601 Duration Format
     channel:
       $ref: '#/channels/OrderAccepted'
     messages:
@@ -95,10 +89,6 @@ operations:
       $ref: '#/channels/OrderDeliveryInitiated'
     messages:
       - $ref: '#/channels/OrderDeliveryInitiated/messages/orderDeliveryInitiation.message'
-    x-specmatic-side-effect:
-      command: >
-        test "$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/orders/123?status=SHIPPED)" = "200"
-      timeout: 'PT5S'
 components:
   messages:
     OrderRequest:

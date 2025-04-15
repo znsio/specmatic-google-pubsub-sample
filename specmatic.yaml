@@ -1,4 +1,4 @@
 sources:
   - provider: "filesystem"
     provides:
-      - "./specs/spec.yaml"
+      - "./specification/spec.yaml"
