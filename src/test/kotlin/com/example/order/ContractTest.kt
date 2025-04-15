@@ -22,7 +22,7 @@ class ContractTest : SpecmaticGooglePubSubTestBase() {
         fun setUp() {
             pubSubEmulator.start()
             googlePubSubMock = GooglePubSubMock.connectWithBroker(PROJECT_ID)
-            context = runApplication<ProductServiceApplication>()
+            context = runApplication<OrderServiceApplication>()
         }
 
         @JvmStatic

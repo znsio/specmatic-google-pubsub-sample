@@ -3,19 +3,19 @@ package com.example.order
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Service
 
-private const val SERVICE_NAME = "order-notification-service"
+private const val SERVICE_NAME = "OrderAcceptanceService"
+private const val TOPIC_NAME = "accepted-orders"
 
 @Service
-class OrderNotificationService(
-    private val config: Configuration
+class OrderAcceptanceService(
+    config: Configuration
 ) {
-
     private val googlePubSubClient = GooglePubSubClient(config.projectId, SERVICE_NAME)
 
-    fun notify(request: NotifyOrderRequest) {
-        println("[$SERVICE_NAME] Publishing the notify message on topic 'notify-order'..")
+    fun notify(request: OrderUpdateRequest) {
+        println("[$SERVICE_NAME] Publishing the acceptance message on topic '$TOPIC_NAME'..")
         googlePubSubClient.publish(
-            "notify-order",
+            TOPIC_NAME,
             ObjectMapper().writeValueAsString(request)
         )
     }

@@ -25,30 +25,35 @@ servers:
           credentialsPath: '~/.config/gcloud/application_default_credentials.json'
 channels:
   NewOrderPlaced:
-    address: place-order
+    address: new-orders
     messages:
       placeOrder.message:
         $ref: '#/components/messages/OrderRequest'
-  NewOrderProcessed:
-    address: process-order
+  OrderInitiated:
+    address: wip-orders
     messages:
       processOrder.message:
         $ref: '#/components/messages/Order'
   OrderCancellationRequested:
-    address: cancel-order
+    address: to-be-cancelled-orders
     messages:
       cancelOrder.message:
         $ref: '#/components/messages/CancelOrderRequest'
-  OrderCancellationProcessed:
-    address: process-cancellation
+  OrderCancelled:
+    address: cancelled-orders
     messages:
       processCancellation.message:
         $ref: '#/components/messages/CancellationReference'
-  NotifyOrderUpdates:
-    address: notify-order
+  OrderAccepted:
+    address: accepted-orders
     messages:
-      notifyOrder.message:
-        $ref: '#/components/messages/NotifyOrder'
+      orderAccepted.message:
+        $ref: '#/components/messages/OrderAccepted'
+  OrderDeliveryInitiated:
+    address: out-for-delivery-orders
+    messages:
+      orderDeliveryInitiation.message:
+        $ref: '#/components/messages/OutForDelivery'
 operations:
   placeOrder:
     action: receive
@@ -58,9 +63,9 @@ operations:
       - $ref: '#/channels/NewOrderPlaced/messages/placeOrder.message'
     reply:
       channel:
-        $ref: '#/channels/NewOrderProcessed'
+        $ref: '#/channels/OrderInitiated'
       messages:
-        - $ref: '#/channels/NewOrderProcessed/messages/processOrder.message'
+        - $ref: '#/channels/OrderInitiated/messages/processOrder.message'
   cancelOrder:
     action: receive
     channel:
@@ -69,22 +74,31 @@ operations:
       - $ref: '#/channels/OrderCancellationRequested/messages/cancelOrder.message'
     reply:
       channel:
-        $ref: '#/channels/OrderCancellationProcessed'
+        $ref: '#/channels/OrderCancelled'
       messages:
-        - $ref: '#/channels/OrderCancellationProcessed/messages/processCancellation.message'
-  notifyOrder:
+        - $ref: '#/channels/OrderCancelled/messages/processCancellation.message'
+  orderAccepted:
     action: send
     x-specmatic-trigger:
       command: >
-        curl -s -X POST http://localhost:9000/order/notify
+        curl -s -X PUT http://localhost:9000/orders
         -H "Content-Type: application/json"
-        -d '{"orderId":123,"event":"ORDER_PROCESSED","timestamp":"2025-04-12T14:30:00Z"}'
-      # ISO 8601 Duration Format
-      timeout: 'PT5S'
+        -d '{"id":123,"status":"ACCEPTED","timestamp":"2025-04-12T14:30:00Z"}'
+      timeout: 'PT5S' # ISO 8601 Duration Format
     channel:
-      $ref: '#/channels/NotifyOrderUpdates'
+      $ref: '#/channels/OrderAccepted'
     messages:
-      - $ref: '#/channels/NotifyOrderUpdates/messages/notifyOrder.message'
+      - $ref: '#/channels/OrderAccepted/messages/orderAccepted.message'
+  initiateOrderDelivery:
+    action: receive
+    channel:
+      $ref: '#/channels/OrderDeliveryInitiated'
+    messages:
+      - $ref: '#/channels/OrderDeliveryInitiated/messages/orderDeliveryInitiation.message'
+    x-specmatic-side-effect:
+      command: >
+        test "$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/orders/123?status=SHIPPED)" = "200"
+      timeout: 'PT5S'
 components:
   messages:
     OrderRequest:
@@ -146,18 +160,13 @@ components:
           totalAmount:
             type: number
           status:
-            type: string
-            enum:
-              - NEW
-              - INPROGRESS
-              - PROCESSED
-              - FAILED
+            $ref: '#/components/messages/OrderStatus'
       examples:
         - name: NEW_ORDER
           payload:
             id: 10
             totalAmount: 3000
-            status: PROCESSED
+            status: INITIATED
     CancelOrderRequest:
       name: CancelOrderRequest
       title: A cancel order request
@@ -186,38 +195,68 @@ components:
           reference:
             type: integer
           status:
-            type: string
-            enum:
-              - COMPLETED
-              - FAILED
+            $ref: '#/components/messages/OrderStatus'
       examples:
         - name: CANCEL_ORDER
           payload:
             reference: 10
-            status: COMPLETED
-    NotifyOrder:
-      name: NotifyOrder
-      title: An order notification
+            status: CANCELLED
+    OrderAccepted:
+      name: OrderAccepted
+      title: Order accepted by Warehouse
       contentType: application/json
       payload:
         type: object
         properties:
-          orderId:
+          id:
             type: integer
-          event:
-            type: string
-            enum:
-              - ORDER_PROCESSED
-              - ORDER_CANCELLED
+          status:
+            $ref: '#/components/messages/OrderStatus'
           timestamp:
             type: string
         required:
-          - orderId
-          - event
+          - id
+          - status
           - timestamp
       examples:
-        - name: NOTIFY_ORDER
+        - name: ACCEPT_ORDER
+          payload:
+            id: 123
+            status: ACCEPTED
+            timestamp: "2025-04-12T14:30:00Z"
+    OutForDelivery:
+      name: OutForDelivery
+      title: Order is out for delivery
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - orderId
+          - deliveryAddress
+          - deliveryDate
+        properties:
+          orderId:
+            type: integer
+          deliveryAddress:
+            type: string
+          deliveryDate:
+            type: string
+            format: date
+      examples:
+        - name: ORDER_OUT_FOR_DELIVERY
           payload:
             orderId: 123
-            event: ORDER_PROCESSED
-            timestamp: "2025-04-12T14:30:00Z"
+            deliveryAddress: "1234 Elm Street, Springfield"
+            deliveryDate: "2025-04-14"
+    OrderStatus:
+      name: OrderStatus
+      title: Order status
+      payload:
+        type: string
+        enum:
+          - PENDING
+          - INITIATED
+          - ACCEPTED
+          - SHIPPED
+          - DELIVERED
+          - CANCELLED
