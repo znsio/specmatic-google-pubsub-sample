@@ -9,7 +9,6 @@ import org.springframework.boot.runApplication
 import org.springframework.context.ConfigurableApplicationContext
 
 class ContractTest : SpecmaticGooglePubSubTestBase() {
-
     companion object {
         private const val PROJECT_ID = "pub-sub-demo-414308"
         private const val SHUTDOWN_TIMEOUT_FOR_MOCK_IN_MS = 1000
@@ -20,9 +19,11 @@ class ContractTest : SpecmaticGooglePubSubTestBase() {
         @JvmStatic
         @BeforeAll
         fun setUp() {
+            System.setProperty("OVERLAY_FILE", "src/test/resources/spec_overlay.yaml")
             pubSubEmulator.start()
             googlePubSubMock = GooglePubSubMock.connectWithBroker(PROJECT_ID)
             context = runApplication<OrderServiceApplication>()
+            println("[OrderServiceApplication] Application started successfully.")
         }
 
         @JvmStatic
