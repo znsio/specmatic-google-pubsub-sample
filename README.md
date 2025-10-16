@@ -14,7 +14,7 @@ This sample project demonstrates how we can run contract tests against a service
 1. Start Docker Desktop.
 2. Run the following command -
 ```shell
-./gradlew clean test
+./gradlew clean test 
 ```
 
 ## Application Architecture
