@@ -1,7 +1,8 @@
 package com.example.order
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.cloud.pubsub.v1.AckReplyConsumer
 import com.google.pubsub.v1.ProjectSubscriptionName
 import com.google.pubsub.v1.ProjectTopicName
@@ -53,7 +54,7 @@ class OrderDeliveryService(
         println("[$SERVICE_NAME] Received message on topic $ORDER_OUT_FOR_DELIVERY_TOPIC - $orderDeliveryRequest")
 
         val request = try {
-            jacksonObjectMapper().apply {
+            ObjectMapper().apply {
                 configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true)
             }.readValue(orderDeliveryRequest, OrderDeliveryRequest::class.java)
         } catch (e: Exception) {
@@ -77,7 +78,10 @@ class OrderDeliveryService(
 }
 
 data class OrderDeliveryRequest(
+    @JsonProperty("orderId")
     val orderId: Int,
+    @JsonProperty("deliveryAddress")
     val deliveryAddress: String,
+    @JsonProperty("deliveryDate")
     val deliveryDate: String
 )

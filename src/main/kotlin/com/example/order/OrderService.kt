@@ -2,8 +2,9 @@ package com.example.order
 
 import com.example.order.OrderStatus.CANCELLED
 import com.example.order.OrderStatus.INITIATED
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.cloud.pubsub.v1.AckReplyConsumer
 import com.google.pubsub.v1.ProjectSubscriptionName
 import com.google.pubsub.v1.ProjectTopicName
@@ -52,7 +53,7 @@ class OrderService(
             val placeOrderRequest = message.data.toStringUtf8()
             println("[$SERVICE_NAME] Received message on topic $TO_BE_CANCELLED_ORDERS_TOPIC - $placeOrderRequest")
             val placeOrderRequestJson = try {
-                jacksonObjectMapper().apply {
+                ObjectMapper().apply {
                     configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true)
                 }.readValue(placeOrderRequest, PlaceOrderRequest::class.java)
             } catch (e: Exception) {
@@ -84,7 +85,7 @@ class OrderService(
             println("[$SERVICE_NAME] Received message on topic $TO_BE_CANCELLED_ORDERS_TOPIC - $cancellationRequest")
 
             val orderIdObject = try {
-                jacksonObjectMapper().apply {
+                ObjectMapper().apply {
                     configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true)
                 }.readValue(cancellationRequest, OrderId::class.java)
             } catch (e: Exception) {
@@ -140,6 +141,8 @@ class OrderService(
 }
 
 data class PlaceOrderRequest(
+    @JsonProperty("id")
     val id: Int,
+    @JsonProperty("orderItems")
     val orderItems: List<OrderItem>
 )
