@@ -29,24 +29,8 @@ jobs:
           distribution: 'oracle'
           java-version: ${{ matrix.java }}
 
-      # publish specmatic-google-pubsub jar to local maven repo
-      - name: Checkout specmatic-google-pubsub repo
-        uses: actions/checkout@v4
-        with:
-          repository: znsio/specmatic-google-pubsub
-          path: specmatic-google-pubsub
-          token: ${{ secrets.ACTIONS_GITHUB_TOKEN }}
-
-      - name: Grant execute permission for gradlew
-        working-directory: specmatic-google-pubsub
-        run: chmod +x gradlew
-
-      - name: Publish specmatic-google-pubsub to Local Maven Repo
-        working-directory: specmatic-google-pubsub
-        run: ./gradlew publishToMavenLocal
-      
       # Build and test specmatic-google-pubsub-sample project 
-      - name: Grant execute permission for gradlew on specmatic-google-pubsub-sample repo
+      - name: Grant execute permission for gradlew 
         run: chmod +x gradlew
 
       - name: Build with Gradle
